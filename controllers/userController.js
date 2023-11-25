@@ -1,3 +1,5 @@
+const response = require("../response/response");
+
 let self = module.exports = {
         userRegister : async function(req, res) {
             const currentDate = new Date();
@@ -65,4 +67,19 @@ let self = module.exports = {
                 }
             }
         },
+
+        userDelete: async function(req, res){
+            const user_id = req.params.id
+            const {username, password} = req.body
+            const criteria = {user_id, username, password}
+
+            const getUser = await query.select('user', criteria)
+
+            if(getUser.length > 0) {
+                await query.delete('user', criteria)
+                response.OK(res, {status : 'success', message:'data berhasil dihapus', data: []})
+            }else{
+                response.NOTFOUND(res, {status :'Failed', message: 'data tidak ditemukan', data :[]})
+            }
+        }
 }
