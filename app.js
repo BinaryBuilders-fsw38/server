@@ -2,8 +2,8 @@ const express   = require('express')
 const app      = express()
 const cors      = require('cors')
 const routes = require('./routes/routes')
-require('dotenv').config()
-const port      = 3000
+require('dotenv').config({path: './env/.env'})
+const port      = process.env.PORT_SERVER
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded

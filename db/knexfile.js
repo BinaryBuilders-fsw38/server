@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+require('dotenv').config({path: './env/.env'})
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -11,7 +11,7 @@ module.exports = {
     host : '127.0.0.1',
     port : 5432,
     user : 'postgres',
-    password : 'nimda',
+    password : process.env.POSTGRES_PASSWORD,
     database : 'E-COMERCE'
     }
   }

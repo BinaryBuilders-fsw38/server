@@ -72,7 +72,6 @@ let self = module.exports = {
             const user_id = req.params.id
             const {username, password} = req.body
             const criteria = {user_id, username, password}
-
             const getUser = await query.select('user', criteria)
 
             if(getUser.length > 0) {

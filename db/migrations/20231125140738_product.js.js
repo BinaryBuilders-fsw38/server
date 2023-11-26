@@ -6,6 +6,7 @@
         return knex.schema.createTable("product", (table) => {
         table.increments("product_id").primary(); // untuk buat ID
         table.string("product_name");
+        table.string("product_file");
         table.text("description");
         table.string("brand");
         table.integer("price");

@@ -1,12 +1,11 @@
-require('dotenv').config()
+require('dotenv').config({path: './env/.env'})
 const knex = require('knex')({
     client: 'pg',
-    version: '14.9',
     connection: {
     host : '127.0.0.1',
     port : 5432,
     user : 'postgres',
-    password : 'nimda',
+    password : process.env.POSTGRES_PASSWORD,
     database : 'E-COMERCE'
     }
 });
