@@ -3,9 +3,8 @@ const response = require("../response/response");
 let self = module.exports = {
         userRegister : async function(req, res) {
             const currentDate = new Date();
-            const { username, password, email, nama, address, phone_number } =
-                req.body
-                const userData = {
+            const { username, password, email, nama, address, phone_number } = req.body
+            const userData = {
                 username,
                 password,
                 email,
@@ -16,17 +15,17 @@ let self = module.exports = {
                 created_at: currentDate,
                 updated_at: currentDate,
                 }
-                const getUser = await query.select('user', {username: username})
-                const getUserEmail = await query.select('user', {email: email})
-                // validasi max char password dan username
-                // validasi password requirement hurup kecil besar, simbol, spasi,
-                // +62 added default
-                if (getUser.length > 0 || getUserEmail.length > 0) {
-                    response.ERROR(res, {status: 'failed', message: 'username sudah terdaftar', data: []})
-                } else {
-                    await query.insert('user', userData)
-                    response.CREATED(res, {status: 'success', message: 'regist berhasil', data: userData})  
-                }
+            const getUser = await query.select('user', {username: username})
+            const getUserEmail = await query.select('user', {email: email})
+            // validasi max char password dan username
+            // validasi password requirement hurup kecil besar, simbol, spasi,
+            // +62 added default
+            if (getUser.length > 0 || getUserEmail.length > 0) {
+                response.ERROR(res, {status: 'failed', message: 'username sudah terdaftar', data: []})
+            } else {
+                await query.insert('user', userData)
+                response.CREATED(res, {status: 'success', message: 'regist berhasil', data: userData})  
+            }
         },
 
         userLogin: async function(req, res){
