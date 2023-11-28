@@ -1,7 +1,39 @@
-const response = require("../response/response");
-
 let self = module.exports = {
-        userRegister : async function(req, res) {
+    // untuk select semua user yg ada di tabel
+        getUserAll: async function (req, res){
+            const getDataUser = await query.selectAll('user')
+            if(getDataUser.length === 0){
+                response.NOTFOUND(res, {
+                    status: 'failed', 
+                    message: 'user tidak ditemukan'
+                })
+            }else {
+                response.OK(res, {
+                    status: 'success', 
+                    message: 'get berhasil', 
+                    data: getDataUser
+                })  
+            }
+        },
+        // untuk select user berdasarkan id
+        getSingleUser : async function (req, res){
+            const user_id = req.params.id
+            const getUser = await query.select('user', {user_id: user_id})
+            if (getUser.length === 0) {
+                response.NOTFOUND(res, {
+                    status: 'failed', 
+                    message: 'user tidak ditemukan',
+                    data: []
+                })
+            }else {
+                response.OK(res, {
+                    status: 'success', 
+                    message: 'get berhasil', 
+                    data: getUser})
+            }
+        },
+
+        userRegister: async function(req, res) {
             const currentDate = new Date();
             const { username, password, email, nama, address, phone_number } = req.body
             const userData = {
@@ -10,61 +42,102 @@ let self = module.exports = {
                 email,
                 nama,
                 address,
-                // rubah di database jadi type data string
                 phone_number: `+62${phone_number}`,
                 created_at: currentDate,
                 updated_at: currentDate,
                 }
-            const getUser = await query.select('user', {username: username})
-            const getUserEmail = await query.select('user', {email: email})
-            // validasi max char password dan username
-            // validasi password requirement hurup kecil besar, simbol, spasi,
-            // +62 added default
-            if (getUser.length > 0 || getUserEmail.length > 0) {
-                response.ERROR(res, {status: 'failed', message: 'username sudah terdaftar', data: []})
-            } else {
-                await query.insert('user', userData)
-                response.CREATED(res, {status: 'success', message: 'regist berhasil', data: userData})  
-            }
+                const getUser = await query.select('user', {username: username})
+                const getUserEmail = await query.select('user', {email: email})
+                // validasi max char password dan username
+                // validasi password requirement hurup kecil besar, simbol, spasi,
+                // +62 added default
+                if (getUser.length > 0 || getUserEmail.length > 0) {
+                    response.ERROR(res, {status: 'failed', message: 'username sudah terdaftar', data: []})
+                } else {
+                    await query.insert('user', userData)
+                    response.CREATED(res, {status: 'success', message: 'regist berhasil', data: userData})  
+                }
         },
+        
 
         userLogin: async function(req, res){
             const { username, password } = req.body
-            console.log(username, password);
             
             const getUser = await query.select('user', { username })
             if (getUser.length > 0) {
                 if (getUser[0].password === password) {
-                    response.OK(res, { status: 'Success', message: 'Login berhasil', data: getUser })
+                        response.OK(res, { 
+                        status: 'Success', 
+                        message: 'Login berhasil', 
+                        data: getUser 
+                    })
                 } else {
-                    response.NOTFOUND(res, { status: 'Failed', message: 'Password tidak sesuai', data: [] })
+                        response.NOTFOUND(res, { 
+                        status: 'Failed', 
+                        message: 'Password tidak sesuai', 
+                        data: [] 
+                    })
                 }
             } else {
-                response.ERROR(res, { status: 'Failed', message: 'Login gagal', data: [] })
+                response.ERROR(res, { 
+                status: 'Failed', 
+                message: 'Login gagal', 
+                data: [] 
+            })
             }
         },
 
         userUpdate: async function (req, res) {
             const user_id = req.params.id
-            const {username, password, email, nama, address, phone_number } = req.body
+            const {nama, address, phone_number } = req.body
             const currentDate = new Date()
             // validasi max char password dan username
                 // validasi password requirement hurup kecil besar, simbol, spasi,
                 // +62 added default
-            if (username.length >= 15 || password.length >= 20) {
-                response.ERROR(res, { status: 'Failed', message: 'Maksimum karakter username 15 dan password 8 dan nama 35', data: [] })
-            } else {
                 const getUser = await query.select('user', {user_id: user_id })
         
                 if (getUser.length > 0) {
-                    const insertUser = {user_id: user_id, username, password, email, nama, address, phone_number, updated_at: currentDate}
+                    const insertUser = {user_id: user_id, nama, address, phone_number: `+62${phone_number}`, updated_at: currentDate}
         
                     await query.update('user', insertUser, { user_id})
-                    response.OK(res, { status: 'success', message: 'Update berhasil', data: insertUser })
+                    response.OK(res, { 
+                    status: 'success', 
+                    message: 'Update berhasil', 
+                    data: insertUser })
                 } else {
-                    response.NOTFOUND(res, { status: 'Failed', message: 'Email tidak ditemukan', data: [] })
+                    response.NOTFOUND(res, { 
+                        status: 'Failed', 
+                        message: 'Email tidak ditemukan', 
+                        data: [] })
                 }
-            }
+            },
+        
+        userUpdateAuth: async function (req, res){
+            const user_id = req.params.id
+            const {email, username, new_password, old_password} = req.body
+            const getUser = await query.select('user', {user_id: user_id, email: email, password: old_password})
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&\s]{8,}$/
+                if(!passwordRegex.test(new_password)){
+                    response.ERROR(res, {
+                        status: 'failed',
+                        message:
+                            'Password harus terdiri dari setidaknya 8 karakter, setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu simbol (@$!%*?&)',
+                        data: [],
+                    })
+                }else  if (getUser.length > 0) {
+                    const insertData = {user_id: user_id, username, password: new_password}
+                    await query.update('user', insertData, {user_id})
+                        response.OK(res, { 
+                            status: 'success', 
+                            message: 'Update berhasil', 
+                            data: insertData })
+                        }else{
+                            response.NOTFOUND(res, { 
+                                status: 'Failed', 
+                                message: 'Email tidak ditemukan atau passwod lama salah', 
+                                data: [] })
+                        }
+                
         },
 
         userDelete: async function(req, res){
@@ -74,10 +147,16 @@ let self = module.exports = {
             const getUser = await query.select('user', criteria)
 
             if(getUser.length > 0) {
-                await query.delete('user', criteria)
-                response.OK(res, {status : 'success', message:'data berhasil dihapus', data: []})
+                    await query.delete('user', criteria)
+                    response.OK(res, {status : 'success', 
+                    message:'data berhasil dihapus', 
+                    data: []
+                })
             }else{
-                response.NOTFOUND(res, {status :'Failed', message: 'data tidak ditemukan', data :[]})
+                    response.NOTFOUND(res, {status :'Failed', 
+                    message: 'data tidak ditemukan', 
+                    data :[]
+                })
             }
         }
 }
