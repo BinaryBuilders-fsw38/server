@@ -10,7 +10,7 @@
         table.string("email");
         table.string("password");
         table.string("address");
-        table.integer("phone_number");
+        table.string("phone_number");
         table.timestamp("created_at");
         table.timestamp("updated_at");
         });

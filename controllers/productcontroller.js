@@ -1,4 +1,3 @@
-const response = require("../response/response");
 
 
 let self = module.exports = {
@@ -50,7 +49,7 @@ let self = module.exports = {
 
         if (getProduct.length > 0) {
             const inserProduct = {
-                product_name,
+            product_name,
             product_file: product_file.path, 
             description,
             brand,
