@@ -73,7 +73,7 @@ let self = module.exports = {
             await query.delete('product', {product_id: product_id})
             response.OK(res, {status: 'success', message: 'product deleted', data: getProduct})
         }else {
-            response.NOTFOUND(res, {ststus: 'failed', message: 'product not found', data: []})
+            response.NOTFOUND(res, {status: 'failed', message: 'product not found', data: []})
         }
     }
 }

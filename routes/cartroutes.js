@@ -4,5 +4,6 @@ global.response = require('../response/response')
 const cart      = require('../controllers/cartController')
 
 router.post('/add/:id', cart.addCart)
+router.delete('/del/:id', cart.deleteCartByID)
 
 module.exports = router
