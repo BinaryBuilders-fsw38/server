@@ -32,7 +32,7 @@ let self = module.exports = {
                     data: getUser})
             }
         },
-
+        // untuk register mengambil data dri client dan dimasukan ke database lewat req.body
         userRegister: async function(req, res) {
             const currentDate = new Date();
             const { username, password, email, nama, address, phone_number } = req.body
@@ -45,18 +45,47 @@ let self = module.exports = {
                 phone_number: `+62${phone_number}`,
                 created_at: currentDate,
                 updated_at: currentDate,
-                }
-                const getUser = await query.select('user', {username: username})
-                const getUserEmail = await query.select('user', {email: email})
-                // validasi max char password dan username
-                // validasi password requirement hurup kecil besar, simbol, spasi,
-                // +62 added default
-                if (getUser.length > 0 || getUserEmail.length > 0) {
-                    response.ERROR(res, {status: 'failed', message: 'username sudah terdaftar', data: []})
-                } else {
-                    await query.insert('user', userData)
-                    response.CREATED(res, {status: 'success', message: 'regist berhasil', data: userData})  
-                }
+            }
+        
+            const getUser = await query.select('user', { username: username })
+            const getUserEmail = await query.select('user', { email: email })
+            // regexpassword untuk menghandle password wajib mengunakan simbol, angka, huruf besar & kecil, dan tanpa sepasi 
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&\s]{8,}$/
+        
+            if (
+                !username ||
+                !password ||
+                !email ||
+                !nama ||
+                !address ||
+                !phone_number
+            ) {
+                response.ERROR(res, {
+                    status: 'Gagal',
+                    message: 'Ada field yang belum diisi',
+                    data: [],
+                })
+            } else if (getUser.length > 0 || getUserEmail.length > 0) {
+                response.ERROR(res, {
+                    status: 'failed',
+                    message: 'Username atau email sudah terdaftar',
+                    data: [],
+                })
+            } else if (!passwordRegex.test(password)) {
+                response.ERROR(res, {
+                    status: 'failed',
+                    message:
+                        'Password harus terdiri dari setidaknya 8 karakter, setidaknya satu huruf kecil, satu huruf besar, satu angka, dan satu simbol (@$!%*?&)',
+                    data: [],
+                })
+            } else {
+                await query.insert('user', userData)
+                response.CREATED(res, {
+                    status: 'success',
+                    message: 'Registrasi berhasil',
+                    data: userData,
+                })
+            }
         },
         
 
@@ -86,7 +115,7 @@ let self = module.exports = {
             })
             }
         },
-
+        //  userUpdate untuk updating data profile user
         userUpdate: async function (req, res) {
             const user_id = req.params.id
             const {nama, address, phone_number } = req.body
@@ -111,7 +140,7 @@ let self = module.exports = {
                         data: [] })
                 }
             },
-        
+        // userUpdateAuth untuk updating user vlidation accoount
         userUpdateAuth: async function (req, res){
             const user_id = req.params.id
             const {email, username, new_password, old_password} = req.body
@@ -139,7 +168,7 @@ let self = module.exports = {
                         }
                 
         },
-
+        // userDelete untuk menghapus account beserta data keseluruhan user
         userDelete: async function(req, res){
             const user_id = req.params.id
             const {username, password} = req.body

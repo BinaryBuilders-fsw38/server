@@ -1,7 +1,7 @@
 
 
 let self = module.exports = {
-
+    // untuk menampilkan product 
     readProduct: async function (req, res) {
         const brand = req.params.brand
         const getProduct  = await query.select('product', {brand: brand})
@@ -12,7 +12,7 @@ let self = module.exports = {
             response.OK(res, {status: 'success', message: 'data berhasil di select', data: getProduct})
         }
     },
-
+    // untuk menambahkan product
     uploadProduct: async function (req, res) {
         const {product_name, description, brand, price, stock, category_id} = req.body
         const product_file = req.file
@@ -37,7 +37,7 @@ let self = module.exports = {
             response.CREATED(res, {ststus: 'success', message: 'product berhasil di upload', data: inserProduct})
         }
     },
-
+    // untuk update product berdasarkan params id product 
     updateProduct: async function (req, res){
         const product_id = req.params.id
         const {product_name, description, brand, price, stock, category_id} = req.body
@@ -65,7 +65,7 @@ let self = module.exports = {
             response.NOTFOUND(res, {status: 'failed', message: 'product tidak ditemukan', data: []})
         }
     },
-
+// untuk menghapus product beserta data keseluruhannya
     deleteProduct: async function (req, res) {
         const product_id = req.params.id
         const getProduct = await query.select('product', {product_id: product_id})
