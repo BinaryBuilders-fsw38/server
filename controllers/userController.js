@@ -93,7 +93,21 @@ let self = module.exports = {
             const { username, password } = req.body
             
             const getUser = await query.select('user', { username })
-            if (getUser.length > 0) {
+            if (
+                !username ||
+                !password ||
+                !email ||
+                !nama ||
+                !address ||
+                !phone_number
+            ) {
+                response.ERROR(res, {
+                    status: 'Gagal',
+                    message: 'Ada field yang belum diisi',
+                    data: [],
+                })
+
+            }else if (getUser.length > 0) {
                 if (getUser[0].password === password) {
                         response.OK(res, { 
                         status: 'Success', 
@@ -124,8 +138,19 @@ let self = module.exports = {
                 // validasi password requirement hurup kecil besar, simbol, spasi,
                 // +62 added default
                 const getUser = await query.select('user', {user_id: user_id })
+
+                if (
+                    !nama ||
+                    !address ||
+                    !phone_number
+                ) {
+                    response.ERROR(res, {
+                        status: 'Gagal',
+                        message: 'Ada field yang belum diisi',
+                        data: [],
+                    })
         
-                if (getUser.length > 0) {
+                }else if (getUser.length > 0) {
                     const insertUser = {user_id: user_id, nama, address, phone_number: `+62${phone_number}`, updated_at: currentDate}
         
                     await query.update('user', insertUser, { user_id})
@@ -146,7 +171,18 @@ let self = module.exports = {
             const {email, username, new_password, old_password} = req.body
             const getUser = await query.select('user', {user_id: user_id, email: email, password: old_password})
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&\s]{8,}$/
-                if(!passwordRegex.test(new_password)){
+            if (
+                !username ||
+                !new_password ||
+                !old_password ||
+                !email
+            ) {
+                response.ERROR(res, {
+                    status: 'Gagal',
+                    message: 'Ada field yang belum diisi',
+                    data: [],
+                })   
+            }else if(!passwordRegex.test(new_password)){
                     response.ERROR(res, {
                         status: 'failed',
                         message:
@@ -168,7 +204,8 @@ let self = module.exports = {
                         }
                 
         },
-        // userDelete untuk menghapus account beserta data keseluruhan user
+        // userDelete untuk menghapus account beserta data keseluruhan user ==>DONE
+        // tambahkan delete user on cascade ke beberapa tabel
         userDelete: async function(req, res){
             const user_id = req.params.id
             const {username, password} = req.body

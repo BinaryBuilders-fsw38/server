@@ -21,7 +21,7 @@
                 const findProduct = getProduct.find((el)=> el.product_id === product_id)
                 // console.log(getCart.length, 'get cart length');
                 const findCart = getCart.find((el)=> el.product_id === product_id && el.user_id === userId)
-                console.log(findCart, 'FIND CART');
+                // console.log(findCart, 'FIND CART');
                 if(!findProduct){ //validasi  product_id tidak ada dalam database
                     response.NOTFOUND(res,{status:'failed',
                                         message: 'product tidak ditemukan',
@@ -37,8 +37,8 @@
                     // User belum bisa menambahkan product_id yang sudah ditambahkan oleh user lain ==> RESOLVED BY REKA
                     // mas eko tolong tambahan validasi ketika product_id yg diminta tidak ada dalam database.==> DONE
                     const updatedQuantity = findCart.quantity + quantityUser;
-                    console.log(findCart.quantity,'findcart quantity');
-                    console.log(updatedQuantity, 'updated quantity');
+                    // console.log(findCart.quantity,'findcart quantity');
+                    // console.log(updatedQuantity, 'updated quantity');
                     await query.update('cart',
                         {quantity: updatedQuantity, updated_at: currentDate},
                         {user_id: userId, product_id: product_id})
@@ -71,6 +71,3 @@
             }
         }
     }
-
-
-    // membuat fungsi mengurangi stok di produk setelah masuk cart

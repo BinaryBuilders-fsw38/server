@@ -5,8 +5,8 @@ const knex = require('knex')({
     host : '127.0.0.1',
     port : 5432,
     user : 'postgres',
-    password : '',
-    database : 'ecommerce'
+    password : process.env.POSTGRES_PASSWORD,
+    database : 'E-COMERCE'
     }
 });
 let self = module.exports = {
@@ -53,6 +53,7 @@ let self = module.exports = {
             throw error
         }
     },
+    // Tambahkan delete on cascade (foreign key)
     delete:async function remove(table, criteria) {
         try {
         const deletedCount = await knex(table).where(criteria).del()
