@@ -15,24 +15,37 @@
                 updated_at: currentDate,
                 }
             
-                const getCart = await query.select('cart', { user_id: userId, product_id: product_id })
-            
-                if (getCart.length === 0) {
-                await query.insert('cart', cartData)
-                response.CREATED(res, {
+                const getCart = await query.selectAll('cart')
+                const getProduct = await query.selectAll('product')
+                // console.log(getProduct, '==>>> getproduct');
+                const findProduct = getProduct.find((el)=> el.product_id === product_id)
+                // console.log(getCart.length, 'get cart length');
+                const findCart = getCart.find((el)=> el.product_id === product_id && el.user_id === userId)
+                console.log(findCart, 'FIND CART');
+                if(!findProduct){ //validasi  product_id tidak ada dalam database
+                    response.NOTFOUND(res,{status:'failed',
+                                        message: 'product tidak ditemukan',
+                                        data:[]})
+                }else if (!findCart) {
+                    await query.insert('cart', cartData)
+                    response.CREATED(res, {
                     status: 'success',
                     message: 'Barang berhasil ditambahkan ke keranjang',
                     data: cartData,
                 });
-                } else {
+                }else {
                     // User belum bisa menambahkan product_id yang sudah ditambahkan oleh user lain ==> RESOLVED BY REKA
-                    // mas eko tolong tambahan validasi ketika product_id yg diminta tidak ada dalam database.
-                const updatedQuantity = getCart[0].quantity + quantityUser;
-                await query.update('cart', { quantity: updatedQuantity, updated_at: currentDate }, { user_id: userId, product_id: product_id })
-                response.OK(res, {
-                    status: 'success',
-                    message: 'Keranjang berhasil diperbarui',
-                    data: { ...getCart[0], quantity: updatedQuantity },
+                    // mas eko tolong tambahan validasi ketika product_id yg diminta tidak ada dalam database.==> DONE
+                    const updatedQuantity = findCart.quantity + quantityUser;
+                    console.log(findCart.quantity,'findcart quantity');
+                    console.log(updatedQuantity, 'updated quantity');
+                    await query.update('cart',
+                        {quantity: updatedQuantity, updated_at: currentDate},
+                        {user_id: userId, product_id: product_id})
+                    response.OK(res, {
+                        status: 'success',
+                        message: 'Keranjang berhasil diperbarui',
+                        data: { ...findCart, quantity: updatedQuantity },
                 })
                 }
             },
@@ -45,14 +58,14 @@
             if(getCart.length > 0){
                 await query.delete('cart', {cart_id:cart_id})
                 response.OK(res, {
-                    status : 'success', 
-                    message : 'cart deleted', 
-                    data : getCart
+                    status: 'success', 
+                    message: 'cart deleted', 
+                    data: getCart
                 })
             }else{
                 response.NOTFOUND(res, {
-                    status : 'failed', 
-                    message : 'id product not found', 
+                    status: 'failed', 
+                    message: 'id product not found', 
                     data:[]
                 })
             }
@@ -61,4 +74,3 @@
 
 
     // membuat fungsi mengurangi stok di produk setelah masuk cart
-    // 
