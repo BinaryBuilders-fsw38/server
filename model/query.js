@@ -5,8 +5,8 @@ const knex = require('knex')({
     host : '127.0.0.1',
     port : 5432,
     user : 'postgres',
-    password : process.env.POSTGRES_PASSWORD,
-    database : 'E-COMERCE'
+    password : '',
+    database : 'ecommerce'
     }
 });
 let self = module.exports = {
