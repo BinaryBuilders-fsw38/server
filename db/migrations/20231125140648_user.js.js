@@ -5,7 +5,7 @@
     exports.up = function (knex) {
         return knex.schema.createTable("user", (table) => {
         table.increments("user_id").primary(); // untuk buat ID
-        table.string("nama");
+        table.string("name");
         table.string("username");
         table.string("email");
         table.string("password");
