@@ -13,5 +13,4 @@ router.use('/wishlist', wishlistRoutes)
 router.use('/checkout', checkoutRouts)
 router.use('/payment', paymentRoutes)
 
-
 module.exports = router
