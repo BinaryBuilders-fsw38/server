@@ -32,7 +32,7 @@ let self = (module.exports = {
 
       const paymentData = {
         payment_method: payment_method,
-        paymet_reference: reference,
+        payment_reference: reference,
         user_id: idUser,
         checkout_id: checkout_id,
         amount: amount,
