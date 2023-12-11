@@ -5,7 +5,6 @@ let self = module.exports = {
     readProduct: async function (req, res) {
         const brand = req.params.brand
         const getProduct  = await query.select('product', {brand: brand})
-        console.log(getProduct);
         if (getProduct.length === 0) {
             response.NOTFOUND(res, {status: 'failed', message: 'product not found', data: []})
         }else {
@@ -45,7 +44,6 @@ let self = module.exports = {
         const currentDate = new Date()
 
         const getProduct = await query.select('product', {product_id: product_id})
-        console.log(getProduct);
 
         if (getProduct.length > 0) {
             const inserProduct = {
@@ -59,7 +57,7 @@ let self = module.exports = {
             created_at: currentDate,
             updated_at: currentDate
             }
-            await query.insert('product', inserProduct)
+            await query.update('product', inserProduct, {product_id})
             response.OK(res, {status: 'success', message: 'product updated', data: inserProduct})
         }else {
             response.NOTFOUND(res, {status: 'failed', message: 'product tidak ditemukan', data: []})
@@ -78,4 +76,4 @@ let self = module.exports = {
     }
 }
 
-// belum menambahkan validasi
+// belum menambahkan validasi 

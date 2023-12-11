@@ -1,0 +1,68 @@
+    const request = require('supertest');
+    const app = require('../routes/productroutes')
+
+    describe('Product Controller', () => {
+    it('should upload a product successfully', async () => {
+        const response = await request(app)
+        .post('/upload')
+        .field('product_name', 'Test Product')
+        .field('description', 'Product description')
+        .field('brand', 'Test Brand')
+        .field('price', 100)
+        .field('stock', 10)
+        .field('category_id', 1)
+        .attach('product_file', 'https://res.cloudinary.com/dcsvaufjv/image/upload/v1702313742/PRODUCT/utbsfbf2htuctuyrta80.png')
+
+        expect(response.status).toBe(201);
+        expect(response.body).toHaveProperty('status', 'success');
+        expect(response.body).toHaveProperty('message', 'product berhasil di upload')
+        expect(response.body.data).toBeDefined()
+    });
+
+    it('should update a product successfully', async () => {
+        const productIdToUpdate = 11
+
+        const response = await request(app)
+        .put(`/update/${productIdToUpdate}`)
+        .field('product_name', 'biore man')
+        .field('description', 'Updated product description')
+        .field('brand', 'Updated Test Brand')
+        .field('price', 150)
+        .field('stock', 20)
+        .field('category_id', 2)
+        .attach('product_file', 'https://res.cloudinary.com/dcsvaufjv/image/upload/v1702313742/PRODUCT/utbsfbf2htuctuyrta80.png')
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('status', 'success');
+        expect(response.body).toHaveProperty('message', 'product updated')
+        expect(response.body.data).toBeDefined()
+    });
+
+    it('should read products by brand successfully', async () => {
+        const brandToRead = 'biore'
+
+        const response = await request(app)
+        .get(`/get/${brandToRead}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('status', 'success');
+        expect(response.body).toHaveProperty('message', 'data berhasil di select')
+        expect(response.body.data).toBeDefined()
+    });
+    it('should delete a product successfully', async () => {
+        const productIdToDelete = 10
+
+        const response = await request(app)
+        .delete(`/delete/${productIdToDelete}`)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('status', 'success')
+        expect(response.body).toHaveProperty('message', 'product deleted')
+        expect(response.body.data).toBeDefined()
+    })
+    })
+
+
+    // untuk readproduct dan delete product sudah passed, tinggal upload dan update, masi aborted. belum resolve.
+    // dikarenaka ada asyncronus yang melebihi batas waktu run testing, disebabkan karena upload ke cludinary agak butuh waktu
+    // response yang lama.
