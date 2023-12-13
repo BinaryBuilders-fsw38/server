@@ -10,18 +10,11 @@ const knex = require('knex')({
     }
 }) 
 
-const TIMEOUT_DURATION = 10000
-const TIMEOUT_DEADLINE = 60000
-
 let self = (module.exports = {
   select: async function select(table, where) {
     try {
       const data = await Promise.race([
-        knex.select("*").from(table).where(where),
-        timeout({
-          response: TIMEOUT_DURATION,
-          deadline: TIMEOUT_DEADLINE
-        })
+        knex.select("*").from(table).where(where)
       ]);
       return data;
     } catch (error) {
@@ -33,11 +26,7 @@ let self = (module.exports = {
   insert: async function insert(table, data) {
     try {
       const post = await Promise.race([
-        knex(table).insert(data),
-        timeout({
-          response: TIMEOUT_DURATION,
-          deadline: TIMEOUT_DEADLINE
-        })
+        knex(table).insert(data)
       ]);
       return post;
     } catch (error) {
@@ -49,11 +38,7 @@ let self = (module.exports = {
   insertUser: async function insertUser(table, data) {
     try {
       const post = await Promise.race([
-        knex(table).insert(data).returning("id"),
-        timeout({
-          response: TIMEOUT_DURATION,
-          deadline: TIMEOUT_DEADLINE
-        })
+        knex(table).insert(data).returning("id")
       ]);
       return post;
     } catch (error) {
@@ -65,11 +50,7 @@ let self = (module.exports = {
   update: async function update(table, data, where) {
     try {
       const post = await Promise.race([
-        knex(table).update(data).where(where),
-        timeout({
-          response: TIMEOUT_DURATION,
-          deadline: TIMEOUT_DEADLINE
-        })
+        knex(table).update(data).where(where)
       ]);
       return post;
     } catch (error) {
@@ -81,22 +62,12 @@ let self = (module.exports = {
   delete: async function remove(table, criteria) {
     try {
       const deletedCount = await Promise.race([
-        knex(table).where(criteria).del(),
-        timeout({
-          response: TIMEOUT_DURATION,
-          deadline: TIMEOUT_DEADLINE
-        })
+        knex(table).where(criteria).del()
       ]);
       return deletedCount;
     } catch (error) {
       console.error("Gagal menghapus data dari tabel:", error);
       throw error;
     }
-  },
+  }
 })
-
-function timeout({ response, deadline }) {
-  return new Promise((_, reject) =>
-    setTimeout(() => reject(new Error('Request timeout')), deadline)
-  )
-}
