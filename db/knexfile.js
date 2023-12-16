@@ -12,7 +12,7 @@ module.exports = {
     port : 5432,
     user : 'postgres',
     password : process.env.POSTGRES_PASSWORD,
-    database : 'e-commerce'
+    database : process.env.DATABASE_NAME
     }
   }
 
