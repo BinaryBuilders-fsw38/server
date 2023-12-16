@@ -1,12 +1,14 @@
 require('dotenv').config({path: './env/.env'})
 const knex = require('knex')({
-    client: 'pg',
-    connection: {
-    host : '127.0.0.1',
-    port : 5432,
-    user : 'postgres',
-    password : process.env.POSTGRES_PASSWORD,
-    database : process.env.DATABASE_NAME
+  client: 'pg',
+  connection: {
+    connectionString: process.env.CONNECTION_STRING,
+    ssl: { rejectUnauthorized: false }
+    // host : '127.0.0.1',
+    // port : 5432,
+    // user : 'postgres',
+    // password : process.env.POSTGRES_PASSWORD,
+    // database : process.env.DATABASE_NAME
     }
 }) 
 

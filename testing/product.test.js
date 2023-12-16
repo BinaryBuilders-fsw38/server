@@ -23,7 +23,6 @@
         } catch (error) {
             console.log(error);
         }
-
     })
 
     it('should update a product successfully', async () => {
