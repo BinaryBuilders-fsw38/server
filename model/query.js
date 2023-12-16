@@ -1,22 +1,17 @@
-require('dotenv').config({path: './env/.env'})
-const knex = require('knex')({
-  client: 'pg',
+require("dotenv").config({ path: "./env/.env" });
+const knex = require("knex")({
+  client: "pg",
   connection: {
     connectionString: process.env.CONNECTION_STRING,
-    ssl: { rejectUnauthorized: false }
-    // host : '127.0.0.1',
-    // port : 5432,
-    // user : 'postgres',
-    // password : process.env.POSTGRES_PASSWORD,
-    // database : process.env.DATABASE_NAME
-    }
-}) 
+    ssl: { rejectUnauthorized: false },
+  },
+});
 
 let self = (module.exports = {
   select: async function select(table, where) {
     try {
       const data = await Promise.race([
-        knex.select("*").from(table).where(where)
+        knex.select("*").from(table).where(where),
       ]);
       return data;
     } catch (error) {
@@ -27,9 +22,7 @@ let self = (module.exports = {
 
   insert: async function insert(table, data) {
     try {
-      const post = await Promise.race([
-        knex(table).insert(data)
-      ]);
+      const post = await Promise.race([knex(table).insert(data)]);
       return post;
     } catch (error) {
       console.error("Gagal menyisipkan data ke dalam tabel:", error);
@@ -40,7 +33,7 @@ let self = (module.exports = {
   insertUser: async function insertUser(table, data) {
     try {
       const post = await Promise.race([
-        knex(table).insert(data).returning("id")
+        knex(table).insert(data).returning("id"),
       ]);
       return post;
     } catch (error) {
@@ -51,9 +44,7 @@ let self = (module.exports = {
 
   update: async function update(table, data, where) {
     try {
-      const post = await Promise.race([
-        knex(table).update(data).where(where)
-      ]);
+      const post = await Promise.race([knex(table).update(data).where(where)]);
       return post;
     } catch (error) {
       console.error("Gagal mengupdate data dalam tabel:", error);
@@ -64,12 +55,12 @@ let self = (module.exports = {
   delete: async function remove(table, criteria) {
     try {
       const deletedCount = await Promise.race([
-        knex(table).where(criteria).del()
+        knex(table).where(criteria).del(),
       ]);
       return deletedCount;
     } catch (error) {
       console.error("Gagal menghapus data dari tabel:", error);
       throw error;
     }
-  }
-})
+  },
+});
