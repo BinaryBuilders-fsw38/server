@@ -94,10 +94,7 @@ let self = (module.exports = {
     const { username, password } = req.body;
 
     const getUser = await query.select("user", { username });
-    if (
-      !username ||
-      !password 
-    ) {
+    if (!username || !password) {
       response.ERROR(res, {
         status: "Gagal",
         message: "Ada field yang belum diisi",
@@ -129,9 +126,9 @@ let self = (module.exports = {
   userUpdate: async function (req, res) {
     const user_id = req.params.id;
     const { name, address, phone_number } = req.body;
-    
+
     const currentDate = new Date();
-    console.log(name,"namaa")
+    console.log(name, "namaa");
     // validasi max char password dan username
     // validasi password requirement hurup kecil besar, simbol, spasi,
     // +62 added default

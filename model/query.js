@@ -63,4 +63,14 @@ let self = (module.exports = {
       throw error;
     }
   },
+
+  selectAll: async function select(table) {
+    try {
+      const data = await Promise.race([knex(table).select("*")]);
+      return data;
+    } catch (error) {
+      console.error("Gagal get data user dari tabel:", error);
+      throw error;
+    }
+  },
 });
