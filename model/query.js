@@ -20,6 +20,20 @@ let self = (module.exports = {
     }
   },
 
+  join: async function join(tables, columns, where) {
+    try {
+      let query = knex.select("*").from(tables[0]);
+      for (let i = 1; i < tables.length; i++) {
+        query = query.join(tables[i], columns[i - 1][0], columns[i - 1][1]);
+      }
+      const data = await Promise.race([query.where(where)]);
+      return data;
+    } catch (error) {
+      console.error("Gagal melakukan join tabel:", error);
+      throw error;
+    }
+  },
+
   insert: async function insert(table, data) {
     try {
       const post = await Promise.race([knex(table).insert(data)]);
