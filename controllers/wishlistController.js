@@ -4,7 +4,6 @@ let self = (module.exports = {
     const product_id = parseInt(req.body.product_id);
     const created_at = new Date();
     const updated_at = new Date();
-    const getUser = await query.select("user", { user_id });
     const getProduct = await query.select("wishlist", {
       product_id,
     });
@@ -15,21 +14,20 @@ let self = (module.exports = {
       updated_at: updated_at,
     };
 
-    if (getProduct.length > 0 ) {
+    if (getProduct.length > 0) {
       response.ERROR(res, {
         status: "failed",
         message: "wishlist barang yang sama sudah ada",
         data: [],
       });
-     
-      } else{
-        await query.insert("wishlist", data);
-        response.CREATED(res, {
-          status: "success",
-          message: "Wishlist Berhasil Ditambahkan",
-          data: data,
-          });
-    } 
+    } else {
+      await query.insert("wishlist", data);
+      response.CREATED(res, {
+        status: "success",
+        message: "Wishlist Berhasil Ditambahkan",
+        data: data,
+      });
+    }
   },
 
   deleteWishlist: async function (req, res) {
