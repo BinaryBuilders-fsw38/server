@@ -8,8 +8,8 @@ const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 
 cloudinary.config({
-  cloud_name: "dcsvaufjv",
-  api_key: "791932154452294",
+  cloud_name: "durputbem",
+  api_key: "316616679275611",
   api_secret: process.env.API_SECRET,
 });
 
@@ -25,6 +25,7 @@ const upload = multer({ storage: storage });
 router.post("/upload", upload.single("product_file"), product.uploadProduct);
 router.put("/update/:id", upload.single("product_file"), product.updateProduct);
 router.get("/get/:brand", product.readProduct);
+router.get("/get", product.readProductAll);
 router.delete("/delete/:id", product.deleteProduct);
 router.get("/suggest/:id", product.suggestProduct);
 

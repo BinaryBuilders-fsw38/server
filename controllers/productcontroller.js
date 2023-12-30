@@ -19,6 +19,22 @@ let self = (module.exports = {
       });
     }
   },
+  readProductAll: async function (req, res) {
+    const getProduct = await query.selectAll("product");
+    if (getProduct.length === 0) {
+      response.NOTFOUND(res, {
+        status: "failed",
+        message: "product not found",
+        data: [],
+      });
+    } else {
+      response.OK(res, {
+        status: "success",
+        message: "data berhasil di select",
+        data: getProduct,
+      });
+    }
+  },
   // untuk menambahkan product
   uploadProduct: async function (req, res) {
     const { product_name, description, brand, price, stock, category_id } =
