@@ -26,6 +26,7 @@ router.post("/upload", upload.single("product_file"), product.uploadProduct);
 router.put("/update/:id", upload.single("product_file"), product.updateProduct);
 router.get("/get/:brand", product.readProduct);
 router.get("/get", product.readProductAll);
+router.get("/getBrands", product.readBrands);
 router.delete("/delete/:id", product.deleteProduct);
 router.get("/suggest/:id", product.suggestProduct);
 

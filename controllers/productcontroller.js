@@ -35,10 +35,34 @@ let self = (module.exports = {
       });
     }
   },
+
+  readBrands: async function (req, res) {
+    const getBrands = await query.selectDistinct("product", "brand");
+    if (getBrands.length === 0) {
+      response.NOTFOUND(res, {
+        status: "failed",
+        message: "brands not found",
+        data: [],
+      });
+    } else {
+      response.OK(res, {
+        status: "success",
+        message: "brands successfully selected",
+        data: getBrands,
+      });
+    }
+  },
   // untuk menambahkan product
   uploadProduct: async function (req, res) {
-    const { product_name, description, brand, price, stock, category_id } =
-      req.body;
+    const {
+      product_name,
+      description,
+      brand,
+      price,
+      stock,
+      category_id,
+      type_id,
+    } = req.body;
     const product_file = req.file;
     const currentDate = new Date();
 
@@ -50,6 +74,7 @@ let self = (module.exports = {
       price,
       stock,
       category_id,
+      type_id,
       created_at: currentDate,
       updated_at: currentDate,
     };
