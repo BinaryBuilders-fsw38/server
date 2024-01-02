@@ -87,4 +87,18 @@ let self = (module.exports = {
       throw error;
     }
   },
+
+  //untuk mengambil semua brand unik dari tabel produk
+  selectDistinct: async function (table, column) {
+    try {
+      const data = await knex(table).distinct(column);
+      return data;
+    } catch (error) {
+      console.error(
+        `Gagal mengambil data unik dari kolom ${column} di tabel ${table}:`,
+        error
+      );
+      throw error;
+    }
+  },
 });
