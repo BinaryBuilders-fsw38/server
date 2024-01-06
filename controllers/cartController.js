@@ -49,6 +49,24 @@
                 })
                 }
             },
+
+            getCartData: async function(req, res) {
+                const userId = parseInt(req.params.id)
+                const getCart = await query.select('cart', {user_id: userId})
+                
+             
+                if (!getCart) {
+                    response.NOTFOUND(res,{status:'failed',
+                                        message: 'data cart tidak ditemukan',
+                                        data:[]})
+                } else {
+                    response.OK(res, {
+                        status: 'success',
+                        message: 'berikut adalah data cart dari database',
+                        data: getCart
+                })
+                }
+            },
         
         
         // fungsi delete cart by ID
@@ -69,5 +87,7 @@
                     data:[]
                 })
             }
-        }
+        },
+
+        
     }
