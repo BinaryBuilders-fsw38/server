@@ -1,4 +1,3 @@
-const { parse } = require("dotenv");
 
 let self = (module.exports = {
   // untuk menampilkan product

@@ -8,8 +8,8 @@ const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 
 cloudinary.config({
-  cloud_name: "durputbem",
-  api_key: "316616679275611",
+  cloud_name: "dcsvaufjv",
+  api_key: "791932154452294",
   api_secret: process.env.API_SECRET,
 });
 
