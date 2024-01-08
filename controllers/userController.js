@@ -1,3 +1,4 @@
+
 let self = (module.exports = {
   // untuk select semua user yg ada di tabel
   getUserAll: async function (req, res) {
@@ -37,16 +38,8 @@ let self = (module.exports = {
   userRegister: async function (req, res) {
     const currentDate = new Date();
     const { username, password, email, name, address, phone_number } = req.body;
-    const userData = {
-      username,
-      password,
-      email,
-      name,
-      address,
-      phone_number: `+62${phone_number}`,
-      created_at: currentDate,
-      updated_at: currentDate,
-    };
+    
+    
 
     const getUser = await query.select("user", { username: username });
     const getUserEmail = await query.select("user", { email: email });
@@ -81,11 +74,23 @@ let self = (module.exports = {
         data: [],
       });
     } else {
-      await query.insert("user", userData);
+      const userData = {
+        username,
+        password,
+        email,
+        name,
+        address,
+        phone_number: `+62${phone_number}`,
+        created_at: currentDate,
+        updated_at: currentDate,
+      };
+      const inputData = await query.insertUser("user", userData);
+      const user_id = inputData[0];
+      const getUserInsert = await query.select("user", user_id);
       response.CREATED(res, {
         status: "success",
         message: "Registrasi berhasil",
-        data: userData,
+        data: getUserInsert,
       });
     }
   },
