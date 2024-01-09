@@ -3,7 +3,6 @@ let self = (module.exports = {
     const user_id = parseInt(req.params.id);
     const { product_id, comment, score } = req.body;
     const currentDate = new Date();
-    const getProduct = await query.select("user", { user_id });
     const createReview = {
       user_id: user_id,
       product_id,

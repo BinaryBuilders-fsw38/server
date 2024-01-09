@@ -88,6 +88,18 @@ let self = (module.exports = {
     }
   },
 
+
+  insertUser: async function insert(table, data) {
+    try {
+        const post = await knex(table).insert(data).returning('user_id')
+        return post
+    } catch (error) {
+        console.error("Gagal menyisipkan data ke dalam tabel:", error);
+        throw error
+    }
+},
+
+
   //untuk mengambil semua brand unik dari tabel produk
   selectDistinct: async function (table, column) {
     try {
@@ -101,4 +113,5 @@ let self = (module.exports = {
       throw error;
     }
   },
+
 });
