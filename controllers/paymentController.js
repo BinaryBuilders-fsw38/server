@@ -1,188 +1,102 @@
+const query = require("../model/query");
+const response = require("../response/response");
 
 let self = (module.exports = {
-  // untuk menampilkan product
-  readProduct: async function (req, res) {
-    const brand = req.params.brand;
-    const getProduct = await query.select("product", { brand: brand });
-    if (getProduct.length === 0) {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "product not found",
-        data: [],
-      });
-    } else {
-      response.OK(res, {
-        status: "success",
-        message: "data berhasil di select",
-        data: getProduct,
-      });
-    }
-  },
-  readProductAll: async function (req, res) {
-    const getProduct = await query.selectAll("product");
-    if (getProduct.length === 0) {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "product not found",
-        data: [],
-      });
-    } else {
-      response.OK(res, {
-        status: "success",
-        message: "data berhasil di select",
-        data: getProduct,
-      });
-    }
-  },
+  processPayment: async function (req, res) {
+    try {
+      console.log("controller connected");
+      const currentDate = new Date();
+      const idUser = parseInt(req.params.id);
+      const { checkout_id, payment_method } = req.body;
 
-  readBrands: async function (req, res) {
-    const getBrands = await query.selectDistinct("product", "brand");
-    if (getBrands.length === 0) {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "brands not found",
-        data: [],
-      });
-    } else {
-      response.OK(res, {
-        status: "success",
-        message: "brands successfully selected",
-        data: getBrands,
-      });
-    }
-  },
-  // untuk menambahkan product
-  uploadProduct: async function (req, res) {
-    const {
-      product_name,
-      description,
-      brand,
-      price,
-      stock,
-      category_id,
-      type_id,
-    } = req.body;
-    const product_file = req.file;
-    const currentDate = new Date();
+      const order = await query.selectColumns(
+        'checkout', 
+        { user_id: idUser, checkout_id }, 
+        'total_price');
 
-    const inserProduct = {
-      product_name,
-      product_file: product_file.path,
-      description,
-      brand,
-      price,
-      stock,
-      category_id,
-      type_id,
-      created_at: currentDate,
-      updated_at: currentDate,
-    };
+      if (!order) {
+        response.NOTFOUND(res, {
+          status: "not found",
+          message: "order no found",
+          data: [],
+        });
+      }
 
-    if (!inserProduct) {
-      response.ERROR(res, {
-        status: "failed",
-        message: "filed tidak boleh kosong",
-        data: [],
-      });
-    } else {
-      await query.insert("product", inserProduct);
-      response.CREATED(res, {
-        ststus: "success",
-        message: "product berhasil di upload",
-        data: inserProduct,
-      });
-    }
-  },
-  // untuk update product berdasarkan params id product
-  updateProduct: async function (req, res) {
-    const product_id = req.params.id;
-    const { product_name, description, brand, price, stock, category_id } =
-      req.body;
-    const product_file = req.file;
-    const currentDate = new Date();
+      const amount = order.total_price;
 
-    const getProduct = await query.select("product", {
-      product_id: product_id,
-    });
+      const reference = self.generatePaymentReference(payment_method);
 
-    if (getProduct.length > 0) {
-      const inserProduct = {
-        product_name,
-        product_file: product_file.path,
-        description,
-        brand,
-        price,
-        stock,
-        category_id,
+      if (!reference) {
+        response.NOTFOUND(res, {
+          status: "failed",
+          message: "Invalid payment method",
+          data: [],
+        });
+      }
+
+      const paymentData = {
+        payment_method: payment_method,
+        payment_reference: reference,
+        user_id: idUser,
+        checkout_id: checkout_id,
+        amount: amount,
+        status: "Paid",
         created_at: currentDate,
         updated_at: currentDate,
       };
-      await query.update("product", inserProduct, { product_id });
-      response.OK(res, {
-        status: "success",
-        message: "product updated",
-        data: inserProduct,
-      });
-    } else {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "product tidak ditemukan",
-        data: [],
-      });
-    }
-  },
-  // untuk menghapus product beserta data keseluruhannya
-  deleteProduct: async function (req, res) {
-    const product_id = req.params.id;
-    const getProduct = await query.select("product", {
-      product_id: product_id,
-    });
-    if (getProduct.length > 0) {
-      await query.delete("product", { product_id: product_id });
-      response.OK(res, {
-        status: "success",
-        message: "product deleted",
-        data: getProduct,
-      });
-    } else {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "product not found",
-        data: [],
-      });
+
+      await query.insert('payment', paymentData);
+      res.json({ success: true, message: "payment berhasil" });
+
+      const resi = self.generateTrackingNumber();
+
+      const updateData = {
+        shipment_status: "Dikirim",
+        payment_status: "Paid",
+        tracking_number: resi,
+        updated_at: currentDate,
+      };
+      
+      await query.update('checkout', 
+      updateData, 
+      { checkout_id: checkout_id });
+
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      res
+        .status(500)
+        .json({ success: false, error: "Failed to process payment" });
     }
   },
 
-  suggestProduct: async function (req, res) {
-    console.log(`Controller Connected`);
-
-    // Tipe Skin
-    // 1: Kulit Berminyak
-    // 2: Kulit Normal
-    // 3: Kulit Kering
-    // 4: Kulit Kombinasi
-
-    // Nanti Value akan diambil dari dropdown di front-end, dimana valuenya akan berupa type_id yakni (1/2/3/4)
-    const skinType = parseInt(req.params.id);
-    const getProduct = await query.select("product", {
-      type_id: skinType,
-    });
-
-    if (getProduct.length > 0) {
-      response.OK(res, {
-        status: "success",
-        message: "rekomendasi product",
-        data: getProduct,
-      });
-      console.log(getProduct);
-    } else {
-      response.NOTFOUND(res, {
-        status: "failed",
-        message: "product not found",
-        data: [],
-      });
+  generatePaymentReference: function (payment_method) {
+    switch (payment_method.toLowerCase()) {
+      case "va":
+        return (
+          "VA" +
+          Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, "0")
+        );
+      case "gopay":
+        return (
+          "GP" +
+          Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, "0")
+        );
+      default:
+        return null;
     }
+  },
+
+  generateTrackingNumber: function () {
+    // Logika untuk menghasilkan nomor pelacakan
+    // Misalnya, kombinasi tanggal dan karakter acak
+    const date = new Date().toISOString().replace(/[^0-9]/g, "");
+    const randomDigits = Math.floor(Math.random() * 100000)
+      .toString()
+      .padStart(6, "0");
+    return `${date}${randomDigits}`;
   },
 });
-
-// belum menambahkan validasi
