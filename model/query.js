@@ -19,7 +19,6 @@ let self = (module.exports = {
       throw error;
     }
   },
-
   join: async function join(tables, columns, where) {
     try {
       let query = knex.select("*").from(tables[0]);
@@ -131,6 +130,45 @@ let self = (module.exports = {
       return data;
     } catch (error) {
       console.error("Gagal melakukan left join:", error);
+      throw error;
+    }
+  },
+  joinThreeTables: async function select(
+    mainTable,
+    firstJoinTable,
+    secondJoinTable,
+    mainColumn,
+    firstJoinColumn,
+    secondJoinColumn,
+    where = {}
+  ) {
+    try {
+      const data = await knex(mainTable)
+        .select(`${mainTable}.*`, `${firstJoinTable}.*`, `${secondJoinTable}.*`)
+        .leftJoin(
+          firstJoinTable,
+          `${mainTable}.${mainColumn}`,
+          `${firstJoinTable}.${firstJoinColumn}`
+        )
+        .leftJoin(
+          secondJoinTable,
+          `${firstJoinTable}.${firstJoinColumn}`,
+          `${secondJoinTable}.${secondJoinColumn}`
+        )
+        .where(where);
+      return data;
+    } catch (error) {
+      console.error("Gagal melakukan left join:", error);
+      throw error;
+    }
+  },
+  
+  selectColumns: async function selectColumns(table, conditions, columns) {
+    try {
+      const data = await knex(table).select(columns).where(conditions);
+      return data;
+    } catch (error) {
+      console.error(`Gagal mengambil data dari tabel ${table}:`, error);
       throw error;
     }
   },
