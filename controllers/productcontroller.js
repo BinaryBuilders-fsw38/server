@@ -18,6 +18,25 @@ let self = (module.exports = {
       });
     }
   },
+
+  readProductId: async function (req, res) {
+    const product_id = req.params.id;
+    const getProduct = await query.select("product", { product_id: product_id });
+    if (getProduct.length === 0) {
+      response.NOTFOUND(res, {
+        status: "failed",
+        message: "product not found",
+        data: [],
+      });
+    } else {
+      response.OK(res, {
+        status: "success",
+        message: "data berhasil di select",
+        data: getProduct,
+      });
+    }
+  },
+
   readProductAll: async function (req, res) {
     const getProduct = await query.selectAll("product");
     if (getProduct.length === 0) {

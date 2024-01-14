@@ -29,5 +29,7 @@ router.get("/get", product.readProductAll);
 router.get("/getBrands", product.readBrands);
 router.delete("/delete/:id", product.deleteProduct);
 router.get("/suggest/:id", product.suggestProduct);
+router.get("/get-product/:id", product.readProductId);
+
 
 module.exports = router;

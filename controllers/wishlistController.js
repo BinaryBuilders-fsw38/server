@@ -30,6 +30,19 @@ let self = (module.exports = {
     }
   },
 
+  getWishlist: async function(req, res) {
+    const user_id = parseInt(req.params.id);
+    const getWishlistData = await query.select("wishlist", {
+      user_id: user_id,
+  });
+
+  response.OK(res, {
+    status: "success",
+    message: "wishlist berhasil di select",
+    data: getWishlistData,
+  });
+  },
+
   deleteWishlist: async function (req, res) {
     const wishlist_id = parseInt(req.params.id);
     const getWishlistData = await query.select("wishlist", {

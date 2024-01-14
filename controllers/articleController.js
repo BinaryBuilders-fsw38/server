@@ -30,9 +30,9 @@ let self = (module.exports = {
 
   readArticle: async function (req, res) {
     // harusnya getnya by ID
-    const title = req.params.title;
-    const getTitle = await query.select("article", { title: title });
-    if (getTitle.length == 0) {
+    const article_id = req.params.id;
+    const getArticle = await query.select("article", { article_id: article_id });
+    if (getArticle.length == 0) {
       response.NOTFOUND(res, {
         status: "failed",
         message: "article tidak ada",
@@ -42,7 +42,7 @@ let self = (module.exports = {
       response.OK(res, {
         status: "success",
         message: "muncul",
-        data: getTitle,
+        data: getArticle,
       });
     }
   },
@@ -76,7 +76,7 @@ let self = (module.exports = {
     } else {
       response.NOTFOUND(res, {
         status: "failed",
-        message: "Artikel Gagal Diperbarui",
+        message: "Artikel Tidak Ada",
         data: [],
       });
     }
