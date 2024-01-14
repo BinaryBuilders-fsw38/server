@@ -8,8 +8,8 @@ const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 
 cloudinary.config({
-  cloud_name: "dcsvaufjv",
-  api_key: "791932154452294",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
 
@@ -30,6 +30,5 @@ router.get("/getBrands", product.readBrands);
 router.delete("/delete/:id", product.deleteProduct);
 router.get("/suggest/:id", product.suggestProduct);
 router.get("/get-product/:id", product.readProductId);
-
 
 module.exports = router;

@@ -84,9 +84,11 @@ let self = (module.exports = {
         "checkout",
         "cart",
         "product",
+        "user",
         "cart_id",
         "cart_id",
         "product_id",
+        "user_id",
         { "checkout.user_id": userId }
       );
 

@@ -137,14 +137,21 @@ let self = (module.exports = {
     mainTable,
     firstJoinTable,
     secondJoinTable,
+    thirtyJoinTable,
     mainColumn,
     firstJoinColumn,
     secondJoinColumn,
+    thirtyJoinColumn,
     where = {}
   ) {
     try {
       const data = await knex(mainTable)
-        .select(`${mainTable}.*`, `${firstJoinTable}.*`, `${secondJoinTable}.*`)
+        .select(
+          `${mainTable}.*`,
+          `${firstJoinTable}.*`,
+          `${secondJoinTable}.*`,
+          `${thirtyJoinTable}.*`
+        )
         .leftJoin(
           firstJoinTable,
           `${mainTable}.${mainColumn}`,
@@ -154,6 +161,11 @@ let self = (module.exports = {
           secondJoinTable,
           `${firstJoinTable}.${firstJoinColumn}`,
           `${secondJoinTable}.${secondJoinColumn}`
+        )
+        .leftJoin(
+          thirtyJoinTable,
+          `${secondJoinTable}.${secondJoinColumn}`,
+          `${thirtyJoinTable}.${thirtyJoinColumn}`
         )
         .where(where);
       return data;
