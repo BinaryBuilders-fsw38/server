@@ -110,7 +110,7 @@ let self = (module.exports = {
       throw error;
     }
   },
-
+  //join table
   leftJoin: async function select(
     mainTable,
     joinTable,
@@ -162,7 +162,7 @@ let self = (module.exports = {
       throw error;
     }
   },
-  
+
   selectColumns: async function selectColumns(table, conditions, columns) {
     try {
       const data = await knex(table).select(columns).where(conditions);

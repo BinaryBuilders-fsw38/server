@@ -31,10 +31,18 @@ let self = (module.exports = {
       };
 
       await query.insert("checkout", checkout);
-      res.json({ success: true, message: `checkout berhasil` });
+      response.CREATED(res, {
+        status: `success`,
+        message: `Checkout Berhasil ditambahkan`,
+        data: checkout,
+      });
     } catch (error) {
       console.error("Error saat membuat checkout:", error);
-      res.status(500).json({ error: "Failed to create checkout" });
+      response.ERROR(res, {
+        status: `failed`,
+        message: `Checkout Gagal`,
+        data: [],
+      });
     }
   },
 
@@ -47,14 +55,14 @@ let self = (module.exports = {
           { product_id: item.product_id },
           ["price"]
         );
-  
+
         return product[0].price * item.quantity;
       })
     );
-  
+
     return prices.reduce((total, price) => total + price, 0);
   },
-  
+
   getShipmentPrice: function (shipment_method) {
     const standardPrice = 10000;
     const expressPrice = 20000;
@@ -70,22 +78,30 @@ let self = (module.exports = {
   },
   getCheckoutData: async function (req, res) {
     const userId = parseInt(req.params.id);
-  
+
     try {
       const getCheckout = await query.joinThreeTables(
-        'checkout',
-        'cart',
-        'product',
-        'cart_id',
-        'cart_id',
-        'product_id',
-        { 'checkout.user_id': userId }
+        "checkout",
+        "cart",
+        "product",
+        "cart_id",
+        "cart_id",
+        "product_id",
+        { "checkout.user_id": userId }
       );
-  
-      res.json(getCheckout);
+
+      response.CREATED(res, {
+        status: `success`,
+        message: `Berikut adalah hasil checkoutnya`,
+        data: getCheckout,
+      });
     } catch (error) {
       console.error(`Gagal mengambil data checkout:`, error);
-      res.status(500).json({ error: "Failed to get checkout data" });
+      response.NOTFOUND(res, {
+        status: `failed`,
+        message: `Data Not Found`,
+        data: [],
+      });
     }
   },
 });

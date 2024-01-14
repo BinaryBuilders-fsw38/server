@@ -1,9 +1,8 @@
 let self = (module.exports = {
-  
   adminLogin: async function (req, res) {
     const { username, password } = req.body;
     const getAdmin = await query.select("admin", { username });
-    if (!username || !password ) {
+    if (!username || !password) {
       response.ERROR(res, {
         status: "Gagal",
         message: "Ada field yang belum diisi",
@@ -14,7 +13,6 @@ let self = (module.exports = {
         response.OK(res, {
           status: "Success",
           message: "Login berhasil",
-          data: getAdmin,
         });
       } else {
         response.NOTFOUND(res, {
@@ -31,13 +29,13 @@ let self = (module.exports = {
       });
     }
   },
-  
+
   adminDelete: async function (req, res) {
     const admin_id = req.params.id;
     const { username, password } = req.body;
     const criteria = { admin_id, username, password };
     const getAdmin = await query.select("admin", criteria);
-    
+
     if (getAdmin.length > 0) {
       await query.delete("admin", criteria);
       response.OK(res, {
@@ -53,4 +51,4 @@ let self = (module.exports = {
       });
     }
   },
-})
+});

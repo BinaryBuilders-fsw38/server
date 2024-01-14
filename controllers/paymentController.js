@@ -9,10 +9,12 @@ let self = (module.exports = {
       const idUser = parseInt(req.params.id);
       const { checkout_id, payment_method } = req.body;
 
-      const order = await query.selectColumns(
-        'checkout', 
-        { user_id: idUser, checkout_id }, 
-        'total_price');
+      const order = await query.select("checkout", {
+        user_id: idUser,
+        checkout_id: checkout_id,
+      });
+
+      console.log(order, `ini order`);
 
       if (!order) {
         response.NOTFOUND(res, {
@@ -22,7 +24,7 @@ let self = (module.exports = {
         });
       }
 
-      const amount = order.total_price;
+      const amount = order[0].total_price;
 
       const reference = self.generatePaymentReference(payment_method);
 
@@ -45,7 +47,7 @@ let self = (module.exports = {
         updated_at: currentDate,
       };
 
-      await query.insert('payment', paymentData);
+      await query.insert("payment", paymentData);
       res.json({ success: true, message: "payment berhasil" });
 
       const resi = self.generateTrackingNumber();
@@ -56,11 +58,10 @@ let self = (module.exports = {
         tracking_number: resi,
         updated_at: currentDate,
       };
-      
-      await query.update('checkout', 
-      updateData, 
-      { checkout_id: checkout_id });
 
+      console.log(updateData, `testing data`);
+
+      await query.update("checkout", updateData, { checkout_id: checkout_id });
     } catch (error) {
       console.error("Error processing payment:", error);
       res

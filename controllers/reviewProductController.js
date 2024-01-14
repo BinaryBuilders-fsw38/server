@@ -12,6 +12,7 @@ let self = (module.exports = {
       updated_at: currentDate,
     };
 
+    // validasinya diperbaiki
     if (!product_id || !comment || !score || score > 5) {
       response.ERROR(res, {
         status: "failed",
@@ -83,6 +84,8 @@ let self = (module.exports = {
   },
 
   updateReview: async function (req, res) {
+    // tambahkan validasi user ID yang update harus sama dengan yang buat
+    // bisa ditambahkan di params
     const review_id = parseInt(req.params.id);
     const { comment, score } = req.body;
     const currentDate = new Date();
