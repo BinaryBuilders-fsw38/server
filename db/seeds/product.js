@@ -10,6 +10,8 @@ exports.seed = async function (knex) {
   await knex("product").insert([
     {
       product_name: "Ustraa Power Face wash-Energize & De Tan-100g",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705237404/PRODUCT/o0kjeirxdopb2uytklnf.jpg",
       price: 99000,
       stock: 865,
       description:
@@ -22,6 +24,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "Elvicto Deep Clean Face Wash",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705237672/PRODUCT/ep5gfy6j3z3x5kabdmf8.png",
       price: 87000,
       stock: 762,
       description:
@@ -34,6 +38,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "HAUM WASH ON 100 ml",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705306517/PRODUCT/ecptjqktvl1sorql1nur.png",
       price: 100000,
       stock: 563,
       description:
@@ -46,6 +52,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "Elvicto Body Cream With Sunscreen",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705306654/PRODUCT/fjyqmvz8ufelwwbtgyph.jpg",
       price: 133000,
       stock: 234,
       description:
@@ -58,6 +66,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "HMNS Farhampton",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705306738/PRODUCT/jrwigpntrc1w7qwa51gg.jpg",
       price: 385000,
       stock: 145,
       description:
@@ -70,6 +80,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "Yagi Cocoa Coffee Scrub 160gr",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705307101/PRODUCT/ekwy17rlpibspfctyecy.jpg",
       price: 141000,
       stock: 84,
       description:
@@ -82,6 +94,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "SUP Hair Serum Travel Size 30 ML",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705307290/PRODUCT/cg1mmvjiuvo5vhmlfurp.png",
       price: 80000,
       stock: 24,
       description:
@@ -94,6 +108,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "Kelaya Hair Treatment Shampoo 250ml",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705308245/PRODUCT/hei8yb7npdxvntbpuvey.jpg",
       price: 128000,
       stock: 37,
       description:
@@ -106,6 +122,8 @@ exports.seed = async function (knex) {
     },
     {
       product_name: "CAVE Hair Tonic",
+      product_file:
+        "https://res.cloudinary.com/durputbem/image/upload/v1705308309/PRODUCT/cylnhfvslugjvxdtgagv.png",
       price: 125000,
       stock: 54,
       description:
