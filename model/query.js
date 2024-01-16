@@ -19,6 +19,7 @@ let self = (module.exports = {
       throw error;
     }
   },
+  //ini untuk join tabel lebih dari satu
   join: async function join(tables, columns, where) {
     try {
       let query = knex.select("*").from(tables[0]);
@@ -125,47 +126,6 @@ let self = (module.exports = {
           joinTable,
           `${mainTable}.${mainColumn}`,
           `${joinTable}.${joinColumn}`
-        )
-        .where(where);
-      return data;
-    } catch (error) {
-      console.error("Gagal melakukan left join:", error);
-      throw error;
-    }
-  },
-  joinThreeTables: async function select(
-    mainTable,
-    firstJoinTable,
-    secondJoinTable,
-    thirtyJoinTable,
-    mainColumn,
-    firstJoinColumn,
-    secondJoinColumn,
-    thirtyJoinColumn,
-    where = {}
-  ) {
-    try {
-      const data = await knex(mainTable)
-        .select(
-          `${mainTable}.*`,
-          `${firstJoinTable}.*`,
-          `${secondJoinTable}.*`,
-          `${thirtyJoinTable}.*`
-        )
-        .leftJoin(
-          firstJoinTable,
-          `${mainTable}.${mainColumn}`,
-          `${firstJoinTable}.${firstJoinColumn}`
-        )
-        .leftJoin(
-          secondJoinTable,
-          `${firstJoinTable}.${firstJoinColumn}`,
-          `${secondJoinTable}.${secondJoinColumn}`
-        )
-        .leftJoin(
-          thirtyJoinTable,
-          `${secondJoinTable}.${secondJoinColumn}`,
-          `${thirtyJoinTable}.${thirtyJoinColumn}`
         )
         .where(where);
       return data;

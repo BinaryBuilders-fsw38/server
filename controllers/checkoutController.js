@@ -76,22 +76,19 @@ let self = (module.exports = {
         return 0; // Default untuk metode pengiriman tidak valid atau tidak disertakan
     }
   },
+
   getCheckoutData: async function (req, res) {
     const userId = parseInt(req.params.id);
 
     try {
-      const getCheckout = await query.joinThreeTables(
-        "checkout",
-        "cart",
-        "product",
-        "user",
-        "cart_id",
-        "cart_id",
-        "product_id",
-        "user_id",
-        { "checkout.user_id": userId }
+      const getCheckout = await query.join(
+        ["cart", "product", "user"],
+        [
+          ["cart.product_id", "product.product_id"],
+          ["cart.user_id", "user.user_id"],
+        ],
+        { "cart.user_id": userId }
       );
-
       response.CREATED(res, {
         status: `success`,
         message: `Berikut adalah hasil checkoutnya`,
@@ -102,6 +99,26 @@ let self = (module.exports = {
       response.NOTFOUND(res, {
         status: `failed`,
         message: `Data Not Found`,
+        data: [],
+      });
+    }
+  },
+  deleteCheckout: async function (req, res) {
+    const checkout_id = req.params.id;
+    const getProduct = await query.select("checkout", {
+      checkout_id: checkout_id,
+    });
+    if (getProduct.length > 0) {
+      await query.delete("checkout", { checkout_id: checkout_id });
+      response.OK(res, {
+        status: "success",
+        message: "product deleted",
+        data: getProduct,
+      });
+    } else {
+      response.NOTFOUND(res, {
+        status: "failed",
+        message: "product not found",
         data: [],
       });
     }
