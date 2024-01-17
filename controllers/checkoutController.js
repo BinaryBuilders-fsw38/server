@@ -6,13 +6,13 @@ let self = (module.exports = {
     try {
       console.log("controller connected");
       const currentDate = new Date();
-      const idUser = parseInt(req.params.id);
-      const idCart = parseInt(req.body.idCart);
+      const idCart = parseInt(req.params.id);
+      const idUser = parseInt(req.body.idUser);
       const shipment = req.body.shipment;
 
       const cartItems = await query.selectColumns(
         "cart",
-        { user_id: idUser, cart_id: idCart },
+        { cart_id: idCart, user_id: idUser },
         ["product_id", "quantity"]
       );
       const productTotal = await self.calculateTotalPrice(cartItems);
@@ -23,8 +23,8 @@ let self = (module.exports = {
 
       const checkout = {
         total_price,
-        user_id: idUser,
         cart_id: idCart,
+        user_id: idUser,
         created_at: currentDate,
         updated_at: currentDate,
         shipment_method: shipment,
@@ -78,7 +78,7 @@ let self = (module.exports = {
   },
 
   getCheckoutData: async function (req, res) {
-    const cartID = parseInt(req.params.id);
+    const cartId = parseInt(req.params.id);
 
     try {
       const getCheckout = await query.join(
@@ -87,7 +87,7 @@ let self = (module.exports = {
           ["cart.product_id", "product.product_id"],
           ["cart.user_id", "user.user_id"],
         ],
-        { "cart.cart_id": cartID }
+        { "cart.cart_id": cartId }
       );
       response.CREATED(res, {
         status: `success`,
