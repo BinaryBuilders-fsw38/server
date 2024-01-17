@@ -78,7 +78,7 @@ let self = (module.exports = {
   },
 
   getCheckoutData: async function (req, res) {
-    const userId = parseInt(req.params.id);
+    const cartID = parseInt(req.params.id);
 
     try {
       const getCheckout = await query.join(
@@ -87,7 +87,7 @@ let self = (module.exports = {
           ["cart.product_id", "product.product_id"],
           ["cart.user_id", "user.user_id"],
         ],
-        { "cart.user_id": userId }
+        { "cart.cart_id": cartID }
       );
       response.CREATED(res, {
         status: `success`,
