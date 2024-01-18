@@ -4,7 +4,6 @@ const response = require("../response/response");
 let self = (module.exports = {
   checkoutFromCart: async function (req, res) {
     try {
-      console.log("controller connected");
       const currentDate = new Date();
       const idCart = parseInt(req.params.id);
       const idUser = parseInt(req.body.idUser);
