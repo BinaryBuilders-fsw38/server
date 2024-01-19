@@ -23,7 +23,7 @@ let self = (module.exports = {
       response.CREATED(res, {
         status: "success",
         message: "Artikel Berhasil Ditambahkan",
-        data: createArticle,
+        data: [createArticle],
       });
     }
   },
