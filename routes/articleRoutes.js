@@ -7,5 +7,6 @@ router.post("/add/:id", article.addArticle);
 router.put("/update/:id", article.updateArticle);
 router.get("/get/:id", article.readArticle);
 router.delete("/delete/:id", article.deleteArticle);
+router.get("/getall", article.readAllArticle);
 
 module.exports = router;

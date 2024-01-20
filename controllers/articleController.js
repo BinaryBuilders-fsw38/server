@@ -23,9 +23,14 @@ let self = (module.exports = {
       response.CREATED(res, {
         status: "success",
         message: "Artikel Berhasil Ditambahkan",
-        data: [createArticle],
+        data: createArticle,
       });
     }
+  },
+  
+  readAllArticle: async function(req,res) {
+    const getAllData = await query.selectAll(["article"])
+    response.OK(res, {status: "succsess", message: "data berhasil diselect", data: getAllData})
   },
 
   readArticle: async function (req, res) {
