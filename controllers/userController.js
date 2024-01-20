@@ -1,3 +1,7 @@
+const bcrypt = require('bcrypt')
+const jwt   = require('jsonwebtoken')
+const jwtSecret = "kode rahasia"
+const jwtExpired = "1d"
 
 let self = (module.exports = {
   // untuk select semua user yg ada di tabel
@@ -38,7 +42,7 @@ let self = (module.exports = {
   userRegister: async function (req, res) {
     const currentDate = new Date();
     const { username, password, email, name, address, phone_number } = req.body;
-    
+    const encryptedPassword = bcrypt.hashSync(password, 10)
     
 
     const getUser = await query.select("user", { username: username });
@@ -76,7 +80,7 @@ let self = (module.exports = {
     } else {
       const userData = {
         username,
-        password,
+        password : encryptedPassword,
         email,
         name,
         address,
@@ -106,25 +110,33 @@ let self = (module.exports = {
         data: [],
       });
     } else if (getUser.length > 0) {
-      if (getUser[0].password === password) {
-        response.OK(res, {
-          status: "Success",
-          message: "Login berhasil",
+      const isPasswordValid = await bcrypt.compare(password, getUser[0].password)
+      if (!isPasswordValid) {
+        response.ERROR(res, {
+          status: "failed",
+          message: "password / username tidak sesuia",
           data: getUser,
         });
       } else {
-        response.NOTFOUND(res, {
-          status: "Failed",
-          message: "Password tidak sesuai",
-          data: [],
-        });
-      }
-    } else {
-      response.ERROR(res, {
-        status: "Failed",
-        message: "Login gagal",
-        data: [],
+        const token = jwt.sign(
+          {
+              id: getUser[0].user_id
+          },
+          jwtSecret, {
+              expiresIn: jwtExpired
+          }
+      )
+
+          res.status(200)
+      .cookie("authorization", token, {
+              httpOnly: true,
+              secure: true,
+      })
+      .json({
+              message: "success",
+              data: {token, getUser}
       });
+  }
     }
   },
   //  userUpdate untuk updating data profile user
