@@ -13,6 +13,7 @@ let self = (module.exports = {
         response.OK(res, {
           status: "Success",
           message: "Login berhasil",
+          data: getAdmin
         });
       } else {
         response.NOTFOUND(res, {
