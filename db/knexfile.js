@@ -17,4 +17,8 @@ module.exports = {
       // }
     },
   },
+  production: {
+    use_env_variable:
+      "postgres://postgres.zmseibmoxyavlspvqljo:sembahsulton@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres",
+  }
 };

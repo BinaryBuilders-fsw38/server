@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "./env/.env" });
+require("dotenv").config();
 const knex = require("knex")({
   client: "pg",
   connection: {
