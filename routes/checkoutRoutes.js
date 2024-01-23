@@ -6,4 +6,5 @@ const checkout = require("../controllers/checkoutController");
 router.post("/add/:id", checkout.checkoutFromCart);
 router.get("/get/:id", checkout.getCheckoutData);
 router.delete("/delete/:id", checkout.deleteCheckout);
+router.get("/getByUser/:id", checkout.getCheckoutByUser);
 module.exports = router;
