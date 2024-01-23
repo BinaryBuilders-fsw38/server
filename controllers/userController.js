@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt')
-const jwt   = require('jsonwebtoken')
-const jwtSecret = "kode rahasia"
-const jwtExpired = "1d"
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const jwtSecret = "kode rahasia";
+const jwtExpired = "1d";
 
 let self = (module.exports = {
   // untuk select semua user yg ada di tabel
@@ -42,8 +42,7 @@ let self = (module.exports = {
   userRegister: async function (req, res) {
     const currentDate = new Date();
     const { username, password, email, name, address, phone_number } = req.body;
-    const encryptedPassword = bcrypt.hashSync(password, 10)
-    
+    const encryptedPassword = bcrypt.hashSync(password, 10);
 
     const getUser = await query.select("user", { username: username });
     const getUserEmail = await query.select("user", { email: email });
@@ -80,7 +79,7 @@ let self = (module.exports = {
     } else {
       const userData = {
         username,
-        password : encryptedPassword,
+        password: encryptedPassword,
         email,
         name,
         address,
@@ -103,6 +102,7 @@ let self = (module.exports = {
     const { username, password } = req.body;
 
     const getUser = await query.select("user", { username });
+    console.log(getUser);
     if (!username || !password) {
       response.ERROR(res, {
         status: "Gagal",
@@ -110,7 +110,10 @@ let self = (module.exports = {
         data: [],
       });
     } else if (getUser.length > 0) {
-      const isPasswordValid = await bcrypt.compare(password, getUser[0].password)
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        getUser[0].password
+      );
       if (!isPasswordValid) {
         response.ERROR(res, {
           status: "failed",
@@ -120,23 +123,25 @@ let self = (module.exports = {
       } else {
         const token = jwt.sign(
           {
-              id: getUser[0].user_id
+            id: getUser[0].user_id,
           },
-          jwtSecret, {
-              expiresIn: jwtExpired
+          jwtSecret,
+          {
+            expiresIn: jwtExpired,
           }
-      )
+        );
 
-          res.status(200)
-      .cookie("authorization", token, {
-              httpOnly: true,
-              secure: true,
-      })
-      .json({
-              message: "success",
-              data: {token, getUser}
-      });
-  }
+        res
+          .status(200)
+          .cookie("authorization", token, {
+            httpOnly: true,
+            secure: true,
+          })
+          .json({
+            message: "success",
+            data: { token, getUser },
+          });
+      }
     }
   },
   //  userUpdate untuk updating data profile user
