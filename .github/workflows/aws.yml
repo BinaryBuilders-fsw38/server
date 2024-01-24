@@ -23,6 +23,7 @@ jobs:
         with:
           aws-access-key-id: AKIA4MTWM6BL2RG7IRVC
           aws-secret-access-key: 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
+          aws-region: ap-southeast-1
       # Step 5
       - name: Build Application and Run unit Test
         run: python app.py & pytest
@@ -38,6 +39,7 @@ jobs:
         with:
           aws-access-key-id: AKIA4MTWM6BL2RG7IRVC
           aws-secret-access-key: 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
+          aws-region: ap-southeast-1
      # Step 2
       - name: Create CodeDeploy Deployment
         id: deploy
