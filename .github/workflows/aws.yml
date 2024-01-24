@@ -25,7 +25,7 @@ jobs:
           aws-secret-access-key: UPvnX7ULOQCzW/sHDWOF7yCZGDGK6ioqkslRwDbV
           aws-region: ap-southeast-1
       # Step 5
-      - name: Build Application and Run unit Test
+      - name: Run htmlhint
         run: npx htmlhint ./*.html
 
   continuous-deployment:
