@@ -45,7 +45,7 @@ jobs:
         id: deploy
         run: |
           aws deploy create-deployment \
-            --application-name  binary-builder \
-            --deployment-group-name launch-wizard-1 \
+            --application-name  SkinCommerce \
+            --deployment-group-name SkinCommerce_Group \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
