@@ -4,7 +4,7 @@ on:
     branches: [ main ]
 
 jobs:
- continuous-integration:
+  continuous-integration:
     runs-on: ubuntu-latest
     steps:
       # Step 1
@@ -16,7 +16,7 @@ jobs:
           python-version: 3.7
       # Step 3
       - name: Install dependencies
-        run: npm install
+        run: pip install -r requirements.txt
       # Step 4
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
