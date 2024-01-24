@@ -3,6 +3,11 @@ const response = require("../response/response");
 const { checkout } = require("../routes/userroutes");
 
 let self = (module.exports = {
+  getAllDataChekout: async function (req,res) {
+    const getAllDataChekout = await query.selectAll("checkout")
+    response.OK(res, {status: "success", message: "data berhasil diselect", data: getAllDataChekout})
+  },
+
   checkoutFromCart: async function (req, res) {
     try {
       const currentDate = new Date();
