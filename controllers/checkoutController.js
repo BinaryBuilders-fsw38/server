@@ -1,5 +1,5 @@
 const query = require("../model/query");
-const response = require("../response/response");
+const response = require("../response/response"); //bismillah fixing
 
 let self = (module.exports = {
   getAllDataChekout: async function (req, res) {
