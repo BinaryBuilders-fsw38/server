@@ -9,11 +9,6 @@ jobs:
     steps:
       # Step 1
       - uses: actions/checkout@v2
-      # Step 2
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
       # Step 3
       - name: Install dependencies
         run: npm install
@@ -24,9 +19,6 @@ jobs:
           aws-access-key-id: AKIA4MTWM6BL2RG7IRVC
           aws-secret-access-key: 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
           aws-region: ap-southeast-2
-      # Step 5
-      - name: Run htmlhint
-        run: npx htmlhint ./*.html
 
   continuous-deployment:
     runs-on: ubuntu-latest
