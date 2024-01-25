@@ -7,7 +7,7 @@ let self = (module.exports = {
     response.OK(res, {
       status: "success",
       message: "data berhasil diselect",
-      data: getAllDataChekout,
+      data: getAllDataChekout, //fixing
     });
   },
 

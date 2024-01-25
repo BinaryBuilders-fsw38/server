@@ -5,7 +5,7 @@ let self = (module.exports = {
     const currentDate = new Date();
     const getAdmin = await query.select("admin", { admin_id });
     const createArticle = {
-      admin_id: admin_id,
+      admin_id: admin_id, // fixing
       title,
       contain,
       created_at: currentDate,
@@ -27,16 +27,22 @@ let self = (module.exports = {
       });
     }
   },
-  
-  readAllArticle: async function(req,res) {
-    const getAllData = await query.selectAll(["article"])
-    response.OK(res, {status: "succsess", message: "data berhasil diselect", data: getAllData})
+
+  readAllArticle: async function (req, res) {
+    const getAllData = await query.selectAll(["article"]);
+    response.OK(res, {
+      status: "succsess",
+      message: "data berhasil diselect",
+      data: getAllData,
+    });
   },
 
   readArticle: async function (req, res) {
     // harusnya getnya by ID
     const article_id = req.params.id;
-    const getArticle = await query.select("article", { article_id: article_id });
+    const getArticle = await query.select("article", {
+      article_id: article_id,
+    });
     if (getArticle.length == 0) {
       response.NOTFOUND(res, {
         status: "failed",

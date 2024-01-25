@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const userRoutes = require("./userRoutes");
+// const productRoutes = require("./productRoutes");
+// const cartRoutes = require("./cartRoutes");
 const productRoutes = require("./productRoutes");
 const cartRoutes = require("./cartRoutes");
 const wishlistRoutes = require("./wishlistRoutes");
@@ -13,7 +15,7 @@ router.use("/testing", (req, res) => {
   res.send("Kelompok 8");
 });
 router.use("/user", userRoutes);
-router.use("/product", productRoutes);
+router.use("/product", productRoutes); // fix
 router.use("/cart", cartRoutes);
 router.use("/wishlist", wishlistRoutes);
 router.use("/checkout", checkoutRouts);

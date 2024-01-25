@@ -8,4 +8,4 @@ router.get("/get/:id", checkout.getCheckoutData);
 router.delete("/delete/:id", checkout.deleteCheckout);
 router.get("/getByUser/:id", checkout.getCheckoutByUser);
 router.get("/getAll", checkout.getAllDataChekout);
-module.exports = router;
+module.exports = router; // fixing

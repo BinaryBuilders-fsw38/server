@@ -9,4 +9,4 @@ router.get("/get/:id", article.readArticle);
 router.delete("/delete/:id", article.deleteArticle);
 router.get("/getall", article.readAllArticle);
 
-module.exports = router;
+module.exports = router; // fixing

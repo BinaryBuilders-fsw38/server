@@ -6,14 +6,14 @@ let self = (module.exports = {
       response.ERROR(res, {
         status: "Gagal",
         message: "Ada field yang belum diisi",
-        data: [],
+        data: [], // fixing
       });
     } else if (getAdmin.length > 0) {
       if (getAdmin[0].password === password) {
         response.OK(res, {
           status: "Success",
           message: "Login berhasil",
-          data: getAdmin
+          data: getAdmin,
         });
       } else {
         response.NOTFOUND(res, {
@@ -52,6 +52,4 @@ let self = (module.exports = {
       });
     }
   },
-
-  
 });

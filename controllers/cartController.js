@@ -9,7 +9,7 @@ let self = (module.exports = {
     const currentDate = new Date();
     const product_id = parseInt(req.body.product_id);
     const cartData = {
-      quantity: quantityUser,
+      quantity: quantityUser, // fixig
       product_id,
       user_id: userId,
       created_at: currentDate,

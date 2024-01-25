@@ -24,7 +24,7 @@ let self = (module.exports = {
       response.CREATED(res, {
         status: "success",
         message: "Review Berhasil Ditambahkan",
-        data: createReview,
+        data: createReview, // fixing
       });
     }
   },

@@ -120,7 +120,7 @@ let self = (module.exports = {
         data: getCheckout,
       });
     } catch (error) {
-      console.error(`Gagal mengambil data checkout:`, error);
+      console.error(`Gagal mengambil data checkout:`, error); // fixing
       response.NOTFOUND(res, {
         status: `failed`,
         message: `Data Not Found`,

@@ -127,6 +127,7 @@ let self = (module.exports = {
           },
           jwtSecret,
           {
+            // fixing
             expiresIn: jwtExpired,
           }
         );

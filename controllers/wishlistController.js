@@ -26,7 +26,7 @@ let self = (module.exports = {
         status: "success",
         message: "Wishlist Berhasil Ditambahkan",
         data: data,
-      });
+      }); // fixing
     }
   },
 

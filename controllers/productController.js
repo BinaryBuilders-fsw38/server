@@ -1,4 +1,3 @@
-
 let self = (module.exports = {
   // untuk menampilkan product
   readProduct: async function (req, res) {
@@ -21,11 +20,13 @@ let self = (module.exports = {
 
   readProductId: async function (req, res) {
     const product_id = req.params.id;
-    const getProduct = await query.select("product", { product_id: product_id });
+    const getProduct = await query.select("product", {
+      product_id: product_id,
+    });
     if (getProduct.length === 0) {
       response.NOTFOUND(res, {
         status: "failed",
-        message: "product not found",
+        message: "product not found", // fixing
         data: [],
       });
     } else {

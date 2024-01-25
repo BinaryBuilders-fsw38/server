@@ -25,7 +25,7 @@ let self = (module.exports = {
           shipmentStatus = "Dikirim";
           break;
         case "diterima":
-          shipmentStatus = "Diterima";
+          shipmentStatus = "Diterima"; // fixing
           break;
         default:
           return res
