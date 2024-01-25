@@ -1,3 +1,4 @@
+
 let self = (module.exports = {
   addWishlist: async function (req, res) {
     const user_id = parseInt(req.params.id);
@@ -32,7 +33,7 @@ let self = (module.exports = {
 
   getWishlist: async function(req, res) {
     const user_id = parseInt(req.params.id);
-    const getWishlistData = await query.select("wishlist", {
+    const getWishlistData = await query.leftJoin("wishlist", "product", "product_id", "product_id", {
       user_id: user_id,
   });
 

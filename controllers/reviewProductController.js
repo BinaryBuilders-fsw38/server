@@ -1,11 +1,11 @@
 let self = (module.exports = {
   addReview: async function (req, res) {
-    const user_id = parseInt(req.params.id);
-    const { product_id, comment, score } = req.body;
+    const product_id = parseInt(req.params.id);
+    const { user_id, comment, score } = req.body;
     const currentDate = new Date();
     const createReview = {
-      user_id: user_id,
-      product_id,
+      product_id: product_id,
+      user_id,
       comment,
       score,
       created_at: currentDate,
@@ -13,7 +13,7 @@ let self = (module.exports = {
     };
 
     // validasinya diperbaiki
-    if (!product_id || !comment || !score || score > 5) {
+    if (!user_id || !comment || !score || score > 5) {
       response.ERROR(res, {
         status: "failed",
         message: "Review Gagal diinput",

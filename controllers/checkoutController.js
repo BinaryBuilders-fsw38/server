@@ -1,7 +1,13 @@
 const query = require("../model/query");
 const response = require("../response/response");
+const { checkout } = require("../routes/userroutes");
 
 let self = (module.exports = {
+  getAllDataChekout: async function (req,res) {
+    const getAllDataChekout = await query.selectAll("checkout")
+    response.OK(res, {status: "success", message: "data berhasil diselect", data: getAllDataChekout})
+  },
+
   checkoutFromCart: async function (req, res) {
     try {
       const currentDate = new Date();
@@ -118,6 +124,33 @@ let self = (module.exports = {
       response.NOTFOUND(res, {
         status: "failed",
         message: "product not found",
+        data: [],
+      });
+    }
+  },
+  getCheckoutByUser: async function(req,res){
+    const userId = parseInt(req.params.id);
+
+    try {
+      const getCheckout = await query.join(
+        ["cart", "product", "user","checkout"],
+        [
+          ["cart.product_id", "product.product_id"],
+          ["cart.user_id", "user.user_id"],
+          ["cart.cart_id", "checkout.cart_id"]
+        ],
+        { "user.user_id": userId }
+      );
+      response.CREATED(res, {
+        status: `success`,
+        message: `Berikut adalah hasil checkoutnya`,
+        data: getCheckout,
+      });
+    } catch (error) {
+      console.error(`Gagal mengambil data checkout:`, error);
+      response.NOTFOUND(res, {
+        status: `failed`,
+        message: `Data Not Found`,
         data: [],
       });
     }

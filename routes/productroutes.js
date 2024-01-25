@@ -1,7 +1,7 @@
 const router = require("express").Router();
 global.query = require("../model/query");
 global.response = require("../response/response");
-require("dotenv").config({ path: "./env/.env" });
+require("dotenv").config();
 const product = require("../controllers/productController");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("cloudinary").v2;
