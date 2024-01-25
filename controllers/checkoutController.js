@@ -1,11 +1,15 @@
 const query = require("../model/query");
 const response = require("../response/response");
-const { checkout } = require("../routes/userroutes");
+const { checkout } = require("../routes/userRoutes");
 
 let self = (module.exports = {
-  getAllDataChekout: async function (req,res) {
-    const getAllDataChekout = await query.selectAll("checkout")
-    response.OK(res, {status: "success", message: "data berhasil diselect", data: getAllDataChekout})
+  getAllDataChekout: async function (req, res) {
+    const getAllDataChekout = await query.selectAll("checkout");
+    response.OK(res, {
+      status: "success",
+      message: "data berhasil diselect",
+      data: getAllDataChekout,
+    });
   },
 
   checkoutFromCart: async function (req, res) {
@@ -128,16 +132,16 @@ let self = (module.exports = {
       });
     }
   },
-  getCheckoutByUser: async function(req,res){
+  getCheckoutByUser: async function (req, res) {
     const userId = parseInt(req.params.id);
 
     try {
       const getCheckout = await query.join(
-        ["cart", "product", "user","checkout"],
+        ["cart", "product", "user", "checkout"],
         [
           ["cart.product_id", "product.product_id"],
           ["cart.user_id", "user.user_id"],
-          ["cart.cart_id", "checkout.cart_id"]
+          ["cart.cart_id", "checkout.cart_id"],
         ],
         { "user.user_id": userId }
       );
