@@ -100,4 +100,32 @@ let self = (module.exports = {
       .padStart(6, "0");
     return `${date}${randomDigits}`;
   },
+
+  getCheckoutData: async function (req, res) {
+    const cartId = parseInt(req.params.id);
+
+    try {
+      const getCheckout = await query.join(
+        ["cart", "product", "user", "checkout"], // Hanya tabel cart, product, user, dan checkout
+        [
+          ["cart.product_id", "product.product_id"],
+          ["cart.user_id", "user.user_id"],
+          ["cart.cart_id", "checkout.cart_id"], // Asumsi bahwa cart_id pada cart cocok dengan cart_id pada checkout
+        ],
+        { "cart.cart_id": cartId }
+      );
+      response.CREATED(res, {
+        status: `success`,
+        message: `Berikut adalah hasil checkoutnya`,
+        data: getCheckout,
+      });
+    } catch (error) {
+      console.error(`Gagal mengambil data checkout:`, error);
+      response.NOTFOUND(res, {
+        status: `failed`,
+        message: `Data Not Found`,
+        data: [],
+      });
+    }
+  },
 });

@@ -1,4 +1,3 @@
-
 let self = (module.exports = {
   addWishlist: async function (req, res) {
     const user_id = parseInt(req.params.id);
@@ -9,7 +8,7 @@ let self = (module.exports = {
       product_id,
     });
     const data = {
-      user_id: user_id,
+      user_id: user_id, //test
       product_id: product_id,
       created_at: created_at,
       updated_at: updated_at,
@@ -31,17 +30,23 @@ let self = (module.exports = {
     }
   },
 
-  getWishlist: async function(req, res) {
+  getWishlist: async function (req, res) {
     const user_id = parseInt(req.params.id);
-    const getWishlistData = await query.leftJoin("wishlist", "product", "product_id", "product_id", {
-      user_id: user_id,
-  });
+    const getWishlistData = await query.leftJoin(
+      "wishlist",
+      "product",
+      "product_id",
+      "product_id",
+      {
+        user_id: user_id,
+      }
+    );
 
-  response.OK(res, {
-    status: "success",
-    message: "wishlist berhasil di select",
-    data: getWishlistData,
-  });
+    response.OK(res, {
+      status: "success",
+      message: "wishlist berhasil di select",
+      data: getWishlistData,
+    });
   },
 
   deleteWishlist: async function (req, res) {
