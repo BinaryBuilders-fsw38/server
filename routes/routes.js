@@ -9,9 +9,9 @@ const articleRoutes = require("./articleRoutes");
 const reviewProduct = require("./reviewProductRoutes");
 const adminRoutes = require("./adminRoutes");
 
-router.use("/testing",  (req, res) => {
-res.send("Kelompok 5")
-})
+router.use("/testing", (req, res) => {
+  res.send("Kelompok 6");
+});
 router.use("/user", userRoutes);
 router.use("/product", productRoutes);
 router.use("/cart", cartRoutes);
