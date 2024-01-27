@@ -13,6 +13,9 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-for
 
 app.use("/", routes);
+app.get("/testing", (req, res) => {
+  res.send("testing")
+})
 
 app.listen(port, () => {
   console.log(`i love u Binar ${port}`);
