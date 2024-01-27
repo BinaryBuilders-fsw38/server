@@ -4,9 +4,9 @@ if (process.env.NODE_ENV !== "development") {
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const routes = require("./routes/routes");
 require("dotenv").config();
 const port = process.env.PORT || 3000;
+const routes = require("./routes/index.js");
 
 app.use(cors());
 app.use(express.json()); // for parsing application/json
