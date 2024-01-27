@@ -19,8 +19,9 @@ let self = (module.exports = {
       tracking_number: tracking_number,
       updated_at: updated_at,
     };
-
-    if (getDataCheckout[0].shipment_status === "Belum Dikirim" || getUserId.length > 0) {
+    if(!shipment_status || !tracking_number || !updated_at) {
+      response.NOTFOUND(res, {status: "failed", message: "gagal menyisipkan data", data: []})
+    }else if (getDataCheckout[0].shipment_status === "Belum Dikirim" || getUserId.length > 0) {
       await query.update("checkout", inputData, { checkout_id });
       response.OK(res, {
         status: "success",
