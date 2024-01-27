@@ -4,7 +4,7 @@ let self = (module.exports = {
       user_id,
       checkout_id,
       shipment_status,
-      payment_status,
+      // payment_status,
       tracking_number,
       updated_at,
     } = req.body;
@@ -15,12 +15,12 @@ let self = (module.exports = {
     const getUserId = await query.select("user", { user_id });
     const inputData = {
       shipment_status: shipment_status,
-      payment_status: payment_status,
+      // payment_status: payment_status,
       tracking_number: tracking_number,
       updated_at: updated_at,
     };
 
-    if (getDataCheckout[0].shipment_status === "Belum Dikirim") {
+    if (getDataCheckout[0].shipment_status === "Belum Dikirim" || getUserId.length > 0) {
       await query.update("checkout", inputData, { checkout_id });
       response.OK(res, {
         status: "success",
