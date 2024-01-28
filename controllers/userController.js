@@ -102,7 +102,6 @@ let self = (module.exports = {
     const { username, password } = req.body;
 
     const getUser = await query.select("user", { username });
-    console.log(getUser);
     if (!username || !password) {
       response.ERROR(res, {
         status: "Gagal",
