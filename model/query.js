@@ -1,17 +1,17 @@
 require("dotenv").config();
 const knex = require("knex")({
   // Untuk Prod
-  client: "pg",
-  connection:
-    "postgres://postgres.zmseibmoxyavlspvqljo:sembahsulton@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres",
-  use_env_variable: "DATABASE_URL",
+  // client: "pg",
+  // connection:
+  //   "postgres://postgres.zmseibmoxyavlspvqljo:sembahsulton@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres",
+  // use_env_variable: "DATABASE_URL",
 
   // Untuk Dev
-  // client: "pg",
-  // connection: {
-  //   connectionString: process.env.CONNECTION_STRING,
-  //   ssl: { rejectUnauthorized: false },
-  // },
+  client: "pg",
+  connection: {
+    connectionString: process.env.CONNECTION_STRING,
+    ssl: { rejectUnauthorized: false },
+  },
 });
 
 let self = (module.exports = {
